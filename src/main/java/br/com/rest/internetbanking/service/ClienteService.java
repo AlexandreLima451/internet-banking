@@ -4,15 +4,18 @@ import br.com.rest.internetbanking.model.Cliente;
 import br.com.rest.internetbanking.model.dto.ClienteDetalhadoDto;
 import br.com.rest.internetbanking.model.dto.ClienteDto;
 import br.com.rest.internetbanking.model.dto.NovaTransacaoDto;
+import br.com.rest.internetbanking.model.dto.NovoClienteDto;
 import br.com.rest.internetbanking.repository.ClienteRepository;
+import br.com.rest.internetbanking.util.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -91,5 +94,20 @@ public class ClienteService {
             Cliente cliente = clienteOptional.get();
             sacar(cliente, movimentoBancarioDto.getValor());
         }
+    }
+
+    public void cadastrarCliente(NovoClienteDto clienteDto){
+
+        Date dataNascimento = Converter.stringToDate(clienteDto.getDataNascimento());
+
+        Cliente cliente = new Cliente(clienteDto.getNome(),
+                clienteDto.isPlanoExclusive(),
+                clienteDto.getNumeroConta(), dataNascimento);
+
+        repository.save(cliente);
+    }
+
+    public void deletarCliente(Long id){
+        repository.deleteById(id);
     }
 }

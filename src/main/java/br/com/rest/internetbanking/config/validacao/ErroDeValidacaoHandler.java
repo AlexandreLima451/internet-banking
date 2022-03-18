@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,18 @@ public class ErroDeValidacaoHandler {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public List<ErroDeFormularioDto> handle(IllegalArgumentException exception) {
+        List<ErroDeFormularioDto> dto = new ArrayList<>();
+
+        String mensagem = exception.getMessage();
+
+        dto.add(new ErroDeFormularioDto(mensagem));
+
+        return dto;
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ParseException.class)
+    public List<ErroDeFormularioDto> handle(ParseException exception) {
         List<ErroDeFormularioDto> dto = new ArrayList<>();
 
         String mensagem = exception.getMessage();

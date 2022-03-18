@@ -3,6 +3,7 @@ package br.com.rest.internetbanking.controller;
 import br.com.rest.internetbanking.model.dto.ClienteDetalhadoDto;
 import br.com.rest.internetbanking.model.dto.ClienteDto;
 import br.com.rest.internetbanking.model.dto.NovaTransacaoDto;
+import br.com.rest.internetbanking.model.dto.NovoClienteDto;
 import br.com.rest.internetbanking.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -47,6 +49,18 @@ public class ClienteController {
     public ResponseEntity<?> sacar(@RequestBody NovaTransacaoDto movimentoBancarioDto){
 
         service.realizarSaqueComIdCliente(movimentoBancarioDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<?> cadastrar(@RequestBody NovoClienteDto novoCliente){
+        service.cadastrarCliente(novoCliente);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> remover(@PathVariable Long id){
+        service.deletarCliente(id);
         return ResponseEntity.ok().build();
     }
 
