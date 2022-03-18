@@ -3,8 +3,8 @@ package br.com.rest.internetbanking.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,12 +18,16 @@ public class Cliente {
     private boolean planoExclusive;
     private BigDecimal saldo;
     private String numeroConta;
-    private LocalDate dataNascimento;
+
+    @Temporal(TemporalType.DATE)
+    private Date dataNascimento;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<MovimentoBancario> movimentacoes = new ArrayList<>();
 
-    public Cliente(String nome, boolean planoExclusivo, String numeroConta, LocalDate dataNascimento) {
+    public Cliente(){}
+
+    public Cliente(String nome, boolean planoExclusivo, String numeroConta, Date dataNascimento) {
         this.nome = nome;
         this.planoExclusive = planoExclusivo;
         this.numeroConta = numeroConta;
@@ -43,7 +47,7 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public boolean isPlanoExclusive() {
+    public boolean hasPlanoExclusive() {
         return planoExclusive;
     }
 
@@ -63,11 +67,11 @@ public class Cliente {
         this.numeroConta = numeroConta;
     }
 
-    public LocalDate getDataNascimento() {
+    public Date getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(LocalDate dataNascimento) {
+    public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 

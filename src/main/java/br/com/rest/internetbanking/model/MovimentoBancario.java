@@ -2,8 +2,7 @@ package br.com.rest.internetbanking.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 public class MovimentoBancario {
@@ -15,17 +14,20 @@ public class MovimentoBancario {
     @Enumerated(value = EnumType.STRING)
     private Transacao transacao;
 
-    private LocalDateTime dataEHora;
+    @Temporal(TemporalType.DATE)
+    private Date data;
 
     private BigDecimal valor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Cliente cliente;
 
+    public MovimentoBancario(){}
+
     public MovimentoBancario(Transacao transacao, BigDecimal valor) {
         this.transacao = transacao;
         this.valor = valor;
-        this.dataEHora = LocalDateTime.now();
+        this.data = new Date();
     }
 
     public Long getId() {
@@ -56,7 +58,7 @@ public class MovimentoBancario {
         this.valor = valor;
     }
 
-    public LocalDateTime getDataEHora() {
-        return dataEHora;
+    public Date getData() {
+        return data;
     }
 }

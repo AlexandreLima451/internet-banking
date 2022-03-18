@@ -1,22 +1,32 @@
 package br.com.rest.internetbanking.service;
 
 import br.com.rest.internetbanking.model.Cliente;
+import br.com.rest.internetbanking.repository.ClienteRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ClienteServiceTest {
 
     private Cliente cliente;
+
     private ClienteService service;
+
+    @Mock
+    private ClienteRepository repository;
 
     @BeforeEach
     public void inicializar(){
+        MockitoAnnotations.openMocks(this);
         cliente = criarCliente();
-        service = new ClienteService();
+        service = new ClienteService(repository);
         service.depositar(cliente, new BigDecimal("400.00"));
     }
 
@@ -45,8 +55,21 @@ public class ClienteServiceTest {
         Assertions.assertEquals(new BigDecimal("99.00"), cliente.getSaldo());
     }
 
-    private Cliente criarCliente(){
-        LocalDate dataNascimento = LocalDate.of(1987, 4, 2);
+    @Test
+    public void sacarValorAcimaDoSaldoDisponivel(){
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> service.sacar(cliente, new BigDecimal("400.00")));
+    }
+
+    private Cliente criarCliente()  {
+        Date dataNascimento;
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            dataNascimento = sdf.parse("1998-04-12");
+        }catch ( ParseException ex) {
+            dataNascimento = new Date();
+        }
+
         return new Cliente("Carlos", false, "123456", dataNascimento);
     }
 }
